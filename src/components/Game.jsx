@@ -5,9 +5,11 @@ import Board from "./Board";
 const Game = () => {
     // Состояние начала игры
     const [startGame, setStartGame] = useState(false);
+    // Корректность введенных данных
+    const [checkNum, setCheckNum] = useState(true);
 
     // Размер игрового поля (по дефолту 3х3)
-    const [numBoards, setBoard] = useState(3);
+    const [numBoards, setNumBoard] = useState(3);
     // Массив клеток со значениями
     const [squares, setSquares] = useState([
                 [new Array(3).fill(null)],
@@ -22,10 +24,19 @@ const Game = () => {
 
     // -----------------------------------------------------------------
 
+    // проверка на корректность введенных данных
+    function checkNumBoards(num) {
+        if ((num>2) && (Number.isInteger(num))) {
+            setCheckNum(true);
+        } else {
+            setCheckNum(false);
+        }
+    }
+
     // смена количества клеток игрового поля
     function changeNumBoards(num) {
-        calculateWinnerSquares(num);
-        setBoard(num);
+        checkNumBoards(num);
+        setNumBoard(num);
     }
 
     // соаздание массива с выигрышными позициями
@@ -50,12 +61,17 @@ const Game = () => {
     function setConfig(num) {
         let board = new Array(num).fill(null);
 
-        board = board.map( (row, order, acc) => {
-             return acc[order] = Array(num).fill(null);
-        })
+        if (checkNum) {
 
-        setStartGame(true);
-        setSquares(board);
+            calculateWinnerSquares(num);
+
+            board = board.map( (row, order, acc) => {
+                return acc[order] = Array(num).fill(null);
+            })
+
+            setStartGame(true);
+            setSquares(board);
+        }
     }
 
     // первый экран с настройками игры
@@ -64,7 +80,8 @@ const Game = () => {
             <div className="game__num">
                 <p className="game__num-text">Создать поле шириной:</p>
                 <input
-                    type="text" className="game__num-form"
+                    className={(!checkNum) ? 'error game__num-form ' : 'game__num-form '}
+                    type="text"
                     value={numBoards}
                     onChange={event => changeNumBoards(Number(event.target.value))}>
                 </input>
