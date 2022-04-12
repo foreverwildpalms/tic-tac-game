@@ -8,10 +8,6 @@ ol, ul {
     padding-left: 30px;
 }
 
-.btn-move {
-
-}
-
 .board-row:after {
     clear: both;
     content: "";
@@ -67,6 +63,10 @@ ol, ul {
     background: #fff8f8;
     box-shadow: 0 0 7px rgba(232, 120, 120, 0.25);
     border-radius: 15px;
+}
+
+.error {
+    border: 1px solid red;
 }
 
 .game__num-form {
